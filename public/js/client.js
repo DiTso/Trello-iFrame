@@ -120,36 +120,25 @@ var cardButtonCallback = function(t){
     };
   });
 
-  // we could provide a standard iframe popup, but in this case we
-  // will let Trello do the heavy lifting
-  return t.popup({
-    title: 'Popup Search Example',
-    items: items, // Trello will search client side based on the text property of the items
-    search: {
-      count: 5, // how many items to display at a time
-      placeholder: 'Search National Parks',
-      empty: 'No parks found'
-    }
-  });
+
   
   // in the above case we let Trello do the searching client side
   // but what if we don't have all the information up front?
   // no worries, instead of giving Trello an array of `items` you can give it a function instead
-  /*
   return t.popup({
     title: 'Popup Async Search',
     items: function(t, options) {
+      return [{text: parseInt(options.search) ? options.search : (not a number)}];
       // use options.search which is the search text entered so far
       // and return a Promise that resolves to an array of items
       // similar to the items you provided in the client side version above
     },
     search: {
-      placeholder: 'Start typing your search',
-      empty: 'Huh, nothing there',
-      searching: 'Scouring the internet...'
+      placeholder: 'Enter Cost',
+      empty: 'Error',
+      searching: 'Processing...'
     }
   });
-  */
 };
 
 // We need to call initialize to get all of our capability handles set up and registered with Trello
