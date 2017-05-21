@@ -159,14 +159,13 @@ TrelloPowerUp.initialize({
     .then(function(costs){
       var totalCost = 0;
       for (var cost in costs) {
-        console.log(typeof totalCost);
-        totalCost = totalCost + parseFloat(costs[cost]).toFixed(2);
+        totalCost = +totalCost + +costs[cost];
       }
       return [{
         // we can either provide a button that has a callback function
         // that callback function should probably open a popup, overlay, or boardBar
         icon: WHITE_ICON,
-        text: `Total Cost: ${totalCost}`,
+        text: `Total Cost: ${totalCost.toFixed(2)}`,
         callback: boardButtonCallback
       }];
     });
