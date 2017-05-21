@@ -79,23 +79,20 @@ var randomBadgeColor = function() {
 };
 
 var getBadges = function(t){
-  return t.card('name')
-  .get('name')
-  .then(function(cardName){
-    // console.log('We just loaded the card name for fun: ' + cardName);
+  return t.get('card', 'shared', 'cost')
+  .then(function(cost){
     
-    return [{
+    return cost ? [{
       // its best to use static badges unless you need your badges to refresh
       // you can mix and match between static and dynamic
-      title: 'Detail Badge', // for detail badges only
-      text: 'Static',
-      icon: HYPERDEV_ICON, // for card front badges only
+      text: `Cost: ${cost}`,
+      icon: GRAY_ICON, // for card front badges only
       color: null
-    }];
+    }] : [];
   });
 };
 
-var boardButtonCallback = function(t){
+var boardButtonCallback = function(t) {
   return false;
 };
 
@@ -128,30 +125,35 @@ var cardButtonCallback = function(t){
   var cost = t.get('card', 'shared', 'cost').value;
   console.log(cost);
   
-  
-  return t.popup({
-    title: 'Set Cost...',
-    items: function(t, options) {
-      var newCost = parseFloat(options.search).toFixed(2)
-      return [
-        {
-          text: parseFloat(options.search) ? `Set Cost to ${newCost}` : `(not a number)`,
-          callback: function(t) {
-            t.set('card','shared','cost',newCost);
-            return t.closePopup();
+  return t.get('card', 'shared', 'cost')
+  .then(function(cost){
+    console.log(cost);
+
+    return t.popup({
+      title: 'Set Cost...',
+      items: function(t, options) {
+        var newCost = parseFloat(options.search).toFixed(2)
+        return [
+          {
+            text: parseFloat(options.search) ? `Set Cost to ${newCost}` : `(not a number)`,
+            callback: function(t) {
+              t.set('card','shared','cost',newCost);
+              return t.closePopup();
+            }
           }
-        }
-      ];
-      // use options.search which is the search text entered so far
-      // and return a Promise that resolves to an array of items
-      // similar to the items you provided in the client side version above
-    },
-    search: {
-      placeholder: 'Enter Cost',
-      empty: 'Error',
-      searching: 'Processing...'
-    }
+        ];
+        // use options.search which is the search text entered so far
+        // and return a Promise that resolves to an array of items
+        // similar to the items you provided in the client side version above
+      },
+      search: {
+        placeholder: 'Enter Cost',
+        empty: 'Error',
+        searching: 'Processing...'
+      }
+    });
   });
+
 };
 
 // We need to call initialize to get all of our capability handles set up and registered with Trello
@@ -167,27 +169,28 @@ TrelloPowerUp.initialize({
     return new TrelloPowerUp.Promise((resolve) => resolve({ authorized: true }));
   },
   'board-buttons': function(t, options){
-    return [{
-      // we can either provide a button that has a callback function
-      // that callback function should probably open a popup, overlay, or boardBar
-      icon: WHITE_ICON,
-      text: 'Total Cost: $X',
-      callback: boardButtonCallback
-    }];
+    return t.get('board', 'shared', 'cost')
+    .then(function(cost){
+      console.log(t);
+      console.log(options);
+      console.log(cost);
+      return [{
+        // we can either provide a button that has a callback function
+        // that callback function should probably open a popup, overlay, or boardBar
+        icon: WHITE_ICON,
+        text: 'Total Cost: $X',
+        callback: boardButtonCallback
+      }];
+    });
   },
   'card-badges': function(t, options){
     return getBadges(t);
   },
   'card-buttons': function(t, options) {
-
-    t.get('card', 'shared', 'cost').value
-    .then()
-    console.log();
     
     return t.get('card', 'shared', 'cost')
     .then(function(cost){
-      var cost = parseFloat(cost.va).toFixed(2);
-      console.log(cost.value);
+      console.log(cost);
 
       return [{
         // its best to use static badges unless you need your badges to refresh
