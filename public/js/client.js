@@ -82,7 +82,7 @@ var getBadges = function(t){
   return t.card('name')
   .get('name')
   .then(function(cardName){
-    console.log('We just loaded the card name for fun: ' + cardName);
+    // console.log('We just loaded the card name for fun: ' + cardName);
     
     return [{
       // its best to use static badges unless you need your badges to refresh
@@ -125,12 +125,12 @@ var cardButtonCallback = function(t){
   // in the above case we let Trello do the searching client side
   // but what if we don't have all the information up front?
   // no worries, instead of giving Trello an array of `items` you can give it a function instead
-  var cost = t.get('card', 'shared', 'cost');
+  var cost = t.get('card', 'shared', 'cost').value;
   console.log(cost);
   
   
   return t.popup({
-    title: 'Set Cost',
+    title: 'Set Cost...',
     items: function(t, options) {
       var newCost = parseFloat(options.search).toFixed(2)
       return [
@@ -179,13 +179,24 @@ TrelloPowerUp.initialize({
     return getBadges(t);
   },
   'card-buttons': function(t, options) {
-    return [{
-      // usually you will provide a callback function to be run on button click
-      // we recommend that you use a popup on click generally
-      icon: GRAY_ICON, // don't use a colored icon here
-      text: 'Add Cost...',
-      callback: cardButtonCallback
-    }];
+
+    t.get('card', 'shared', 'cost').value
+    .then()
+    console.log();
+    
+    return t.get('card', 'shared', 'cost')
+    .then(function(cost){
+      var cost = parseFloat(cost.va).toFixed(2);
+      console.log(cost.value);
+
+      return [{
+        // its best to use static badges unless you need your badges to refresh
+        // you can mix and match between static and dynamic
+        icon: GRAY_ICON, // don't use a colored icon here
+        text: cost ? `Cost: ${cost}` :'Add Cost...',
+        callback: cardButtonCallback
+      }];
+    });
   },
   'show-authorization': function(t, options){
     // return what to do when a user clicks the 'Authorize Account' link
