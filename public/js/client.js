@@ -79,16 +79,18 @@ var randomBadgeColor = function() {
 };
 
 var getBadges = function(t){
-  return t.get('board', 'shared', 'cost')
-  .then(function(cost){
-    
-    return cost[t.card('id')] ? [{
-      // its best to use static badges unless you need your badges to refresh
-      // you can mix and match between static and dynamic
-      text: `Cost: ${cost}`,
-      icon: GRAY_ICON, // for card front badges only
-      color: null
-    }] : [];
+  return t.get('board', 'shared', 'costs')
+  .then(function(costs){
+    return t.card('id')
+    .then(function(id) {
+      return costs && costs[id] ? [{
+        // its best to use static badges unless you need your badges to refresh
+        // you can mix and match between static and dynamic
+        text: `Cost: ${costs[id]}`,
+        icon: GRAY_ICON, // for card front badges only
+        color: null
+      }] : []; 
+    });
   });
 };
 
@@ -105,8 +107,8 @@ var cardButtonCallback = function(t){
   // no worries, instead of giving Trello an array of `items` you can give it a function instead
 
   return t.get('board', 'shared', 'cost')
-  .then(function(cost){
-    console.log(cost[t.card('id')]);
+  .then(function(costs){
+    console.log(costs[t.card('id')]);
 
     return t.popup({
       title: 'Set Cost...',
@@ -116,7 +118,9 @@ var cardButtonCallback = function(t){
           {
             text: parseFloat(options.search) ? `Set Cost to ${newCost}` : `(not a number)`,
             callback: function(t) {
-              t.set('board','shared','cost',newCost);
+              var newCosts = costs;
+              costs[t.card('id')] = newCost;
+              t.set('board','shared','cost',newCosts);
               return t.closePopup();
             }
           }
@@ -165,15 +169,29 @@ TrelloPowerUp.initialize({
   },
   'card-buttons': function(t, options) {
     
-    return t.get('card', 'shared', 'cost')
+    return t.get('board', 'shared', 'costs')
+    .then(function(costs){
+      return t.card('id')
+      .then(function(id) {
+        return costs && costs[id] ? [{
+          // its best to use static badges unless you need your badges to refresh
+          // you can mix and match between static and dynamic
+          text: `Cost: ${costs[id]}`,
+          icon: GRAY_ICON, // for card front badges only
+          color: null
+      }] : []; 
+    });
+  });
+    
+    return t.get('board', 'shared', 'cost')
     .then(function(cost){
-      console.log(cost);
+      console.log(cost[t.card('id')]);
 
       return [{
         // its best to use static badges unless you need your badges to refresh
         // you can mix and match between static and dynamic
         icon: GRAY_ICON, // don't use a colored icon here
-        text: cost ? `Cost: ${cost}` :'Add Cost...',
+        text: cost ? `Cost: ${cost[t.card('id')]}` :'Add Cost...',
         callback: cardButtonCallback
       }];
     });
