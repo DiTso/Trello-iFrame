@@ -1,7 +1,7 @@
 {
-	"name": "power-up",
+	"name": "trello-costs",
 	"version": "0.0.1",
-	"description": "A sample Trello Power-Up that can be used as a starting point for your own awesome Power-Up.",
+	"description": "Add costs & view sum on trello boards.",
 	"main": "server.js",
 	"scripts": {
 		"start": "node server.js"
