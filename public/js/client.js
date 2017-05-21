@@ -83,10 +83,10 @@ var getBadges = function(t){
   .then(function(costs){
     return t.card('id')
     .then(function(id) {
-      return costs && costs[id] ? [{
+      return costs && costs[id.id] ? [{
         // its best to use static badges unless you need your badges to refresh
         // you can mix and match between static and dynamic
-        text: `Cost: ${costs[id]}`,
+        text: `Cost: ${costs[id.id]}`,
         icon: GRAY_ICON, // for card front badges only
         color: null
       }] : []; 
@@ -106,34 +106,36 @@ var cardButtonCallback = function(t){
   // but what if we don't have all the information up front?
   // no worries, instead of giving Trello an array of `items` you can give it a function instead
 
-  return t.get('board', 'shared', 'cost')
+  
+  return t.get('board', 'shared', 'costs')
   .then(function(costs){
-    console.log(costs[t.card('id')]);
-
-    return t.popup({
-      title: 'Set Cost...',
-      items: function(t, options) {
-        var newCost = parseFloat(options.search).toFixed(2)
-        return [
-          {
-            text: parseFloat(options.search) ? `Set Cost to ${newCost}` : `(not a number)`,
-            callback: function(t) {
-              var newCosts = costs;
-              costs[t.card('id')] = newCost;
-              t.set('board','shared','cost',newCosts);
-              return t.closePopup();
+  return t.card('id')
+    .then(function(id) {
+      return t.popup({
+        title: 'Set Cost...',
+        items: function(t, options) {
+          var newCost = parseFloat(options.search).toFixed(2)
+          return [
+            {
+              text: parseFloat(options.search) ? `Set Cost to ${newCost}` : `(not a number)`,
+              callback: function(t) {
+                var newCosts = costs ? costs : {};
+                newCosts[id.id] = newCost;
+                t.set('board','shared','costs',newCosts);
+                return t.closePopup();
+              }
             }
-          }
-        ];
-        // use options.search which is the search text entered so far
-        // and return a Promise that resolves to an array of items
-        // similar to the items you provided in the client side version above
-      },
-      search: {
-        placeholder: 'Enter Cost',
-        empty: 'Error',
-        searching: 'Processing...'
-      }
+          ];
+          // use options.search which is the search text entered so far
+          // and return a Promise that resolves to an array of items
+          // similar to the items you provided in the client side version above
+        },
+        search: {
+          placeholder: 'Enter Cost',
+          empty: 'Error',
+          searching: 'Processing...'
+        }
+      });
     });
   });
 
@@ -152,6 +154,7 @@ TrelloPowerUp.initialize({
     return new TrelloPowerUp.Promise((resolve) => resolve({ authorized: true }));
   },
   'board-buttons': function(t, options){
+    
     return t.get('board', 'shared', 'costs')
     .then(function(costs){
       console.log(costs);
@@ -173,27 +176,23 @@ TrelloPowerUp.initialize({
     .then(function(costs){
       return t.card('id')
       .then(function(id) {
-        return costs && costs[id] ? [{
+        
+        return [{
           // its best to use static badges unless you need your badges to refresh
           // you can mix and match between static and dynamic
-          text: `Cost: ${costs[id]}`,
-          icon: GRAY_ICON, // for card front badges only
-          color: null
-      }] : []; 
+          icon: GRAY_ICON, // don't use a colored icon here
+          text: costs && costs[id.id] ? `Cost: ${costs[id.id]}` :'Add Cost...',
+          callback: cardButtonCallback
+        }];
+      
+      });
     });
-  });
     
     return t.get('board', 'shared', 'cost')
     .then(function(cost){
       console.log(cost[t.card('id')]);
 
-      return [{
-        // its best to use static badges unless you need your badges to refresh
-        // you can mix and match between static and dynamic
-        icon: GRAY_ICON, // don't use a colored icon here
-        text: cost ? `Cost: ${cost[t.card('id')]}` :'Add Cost...',
-        callback: cardButtonCallback
-      }];
+      
     });
   },
   'show-authorization': function(t, options){
