@@ -70,13 +70,7 @@ t.getAll();
 
 */
 
-var HYPERDEV_ICON = 'https://cdn.hyperdev.com/us-east-1%3A3d31b21c-01a0-4da2-8827-4bc6e88b7618%2Fhyperdev.svg';
-var GRAY_ICON = 'https://cdn.hyperdev.com/us-east-1%3A3d31b21c-01a0-4da2-8827-4bc6e88b7618%2Ficon-gray.svg';
-var WHITE_ICON = 'https://cdn.hyperdev.com/us-east-1%3A3d31b21c-01a0-4da2-8827-4bc6e88b7618%2Ficon-white.svg';
-
-var randomBadgeColor = function() {
-  return ['green', 'yellow', 'red', 'none'][Math.floor(Math.random() * 4)];
-};
+var SIGMA_ICON = 'https://cdn.glitch.com/380a7bed-fba7-4128-9418-b75f0d1d7492%2Fsigma2.svg?1495404692363';
 
 var getBadges = function(t){
   return t.get('board', 'shared', 'costs')
@@ -87,7 +81,6 @@ var getBadges = function(t){
         // its best to use static badges unless you need your badges to refresh
         // you can mix and match between static and dynamic
         text: `Cost: ${costs[id.id]}`,
-        icon: GRAY_ICON, // for card front badges only
         color: null
       }] : []; 
     });
@@ -117,11 +110,13 @@ var cardButtonCallback = function(t){
           var newCost = parseFloat(options.search).toFixed(2)
           return [
             {
-              text: parseFloat(options.search) ? `Set Cost to ${newCost}` : `(not a number)`,
+              text: parseFloat(options.search) ? `Set Cost to ${newCost}` : `(Enter a number to set cost.)`,
               callback: function(t) {
-                var newCosts = costs ? costs : {};
-                newCosts[id.id] = newCost;
-                t.set('board','shared','costs',newCosts);
+                if (newCost != 'NaN') {
+                  var newCosts = costs ? costs : {};
+                  newCosts[id.id] = newCost;
+                  t.set('board','shared','costs',newCosts);
+                }
                 return t.closePopup();
               }
             }
@@ -164,7 +159,7 @@ TrelloPowerUp.initialize({
       return [{
         // we can either provide a button that has a callback function
         // that callback function should probably open a popup, overlay, or boardBar
-        icon: WHITE_ICON,
+        icon: SIGMA_ICON,
         text: `Total Cost: ${totalCost.toFixed(2)}`,
         callback: boardButtonCallback
       }];
@@ -183,7 +178,7 @@ TrelloPowerUp.initialize({
         return [{
           // its best to use static badges unless you need your badges to refresh
           // you can mix and match between static and dynamic
-          icon: GRAY_ICON, // don't use a colored icon here
+          icon: SIGMA_ICON, // don't use a colored icon here
           text: costs && costs[id.id] ? `Cost: ${costs[id.id]}` :'Add Cost...',
           callback: cardButtonCallback
         }];
