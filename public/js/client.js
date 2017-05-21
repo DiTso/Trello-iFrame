@@ -79,10 +79,10 @@ var randomBadgeColor = function() {
 };
 
 var getBadges = function(t){
-  return t.get('card', 'shared', 'cost')
+  return t.get('board', 'shared', 'cost')
   .then(function(cost){
     
-    return cost ? [{
+    return cost[t.card('id')] ? [{
       // its best to use static badges unless you need your badges to refresh
       // you can mix and match between static and dynamic
       text: `Cost: ${cost}`,
@@ -100,34 +100,13 @@ var cardButtonCallback = function(t){
   // Trello Power-Up Popups are actually pretty powerful
   // Searching is a pretty common use case, so why reinvent the wheel
   
-  var items = ['acad', 'arch', 'badl', 'crla', 'grca', 'yell', 'yose'].map(function(parkCode){
-    var urlForCode = 'http://www.nps.gov/' + parkCode + '/';
-    var nameForCode = '🏞 ' + parkCode.toUpperCase();
-    return {
-      text: nameForCode,
-      url: urlForCode,
-      callback: function(t){
-        // in this case we want to attach that park to the card as an attachment
-        return t.attach({ url: urlForCode, name: nameForCode })
-        .then(function(){
-          // once that has completed we should tidy up and close the popup
-          return t.closePopup();
-        });
-      }
-    };
-  });
-
-
-  
   // in the above case we let Trello do the searching client side
   // but what if we don't have all the information up front?
   // no worries, instead of giving Trello an array of `items` you can give it a function instead
-  var cost = t.get('card', 'shared', 'cost').value;
-  console.log(cost);
-  
-  return t.get('card', 'shared', 'cost')
+
+  return t.get('board', 'shared', 'cost')
   .then(function(cost){
-    console.log(cost);
+    console.log(cost[t.card('id')]);
 
     return t.popup({
       title: 'Set Cost...',
@@ -137,7 +116,7 @@ var cardButtonCallback = function(t){
           {
             text: parseFloat(options.search) ? `Set Cost to ${newCost}` : `(not a number)`,
             callback: function(t) {
-              t.set('card','shared','cost',newCost);
+              t.set('board','shared','cost',newCost);
               return t.closePopup();
             }
           }
@@ -169,11 +148,9 @@ TrelloPowerUp.initialize({
     return new TrelloPowerUp.Promise((resolve) => resolve({ authorized: true }));
   },
   'board-buttons': function(t, options){
-    return t.get('board', 'shared', 'cost')
-    .then(function(cost){
-      console.log(t);
-      console.log(options);
-      console.log(cost);
+    return t.get('board', 'shared', 'costs')
+    .then(function(costs){
+      console.log(costs);
       return [{
         // we can either provide a button that has a callback function
         // that callback function should probably open a popup, overlay, or boardBar
