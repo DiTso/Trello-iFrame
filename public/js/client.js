@@ -125,10 +125,23 @@ var cardButtonCallback = function(t){
   // in the above case we let Trello do the searching client side
   // but what if we don't have all the information up front?
   // no worries, instead of giving Trello an array of `items` you can give it a function instead
+  var cost = t.get('card', 'shared', 'cost');
+  console.log(cost);
+  
+  
   return t.popup({
-    title: 'Popup Async Search',
+    title: 'Set Cost',
     items: function(t, options) {
-      return [{text: parseInt(options.search) ? options.search : (not a number)}];
+      var newCost = parseFloat(options.search).toFixed(2)
+      return [
+        {
+          text: parseFloat(options.search) ? `Set Cost to ${newCost}` : `(not a number)`,
+          callback: function(t) {
+            t.set('card','shared','cost',newCost);
+            return t.closePopup();
+          }
+        }
+      ];
       // use options.search which is the search text entered so far
       // and return a Promise that resolves to an array of items
       // similar to the items you provided in the client side version above
