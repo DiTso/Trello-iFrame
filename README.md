@@ -4,6 +4,10 @@ Hey there 👋
 
 This is a Trello Power-Up which lets you add costs to cards and provides a sum of those costs as a board item.
 
+![](https://cdn.glitch.com/380a7bed-fba7-4128-9418-b75f0d1d7492%2FScreen%20Shot%202017-05-21%20at%204.31.26%20PM.png?1495409557125)
+
+![](https://cdn.glitch.com/380a7bed-fba7-4128-9418-b75f0d1d7492%2FScreen%20Shot%202017-05-21%20at%204.31.50%20PM.png?1495409554873)
+
 To enable this Power-Up for your Trello boards, you'll need to go here:
 
 👉  [https://trello.com/power-ups/admin](https://trello.com/power-ups/admin)
