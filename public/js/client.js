@@ -13,7 +13,7 @@ var getBadges = function(t){
         // its best to use static badges unless you need your badges to refresh
         // you can mix and match between static and dynamic
         text: `Cost: ${costs[id.id]}`,
-        color: (costs[id.id] === 0) ? 'FF0000' : null
+        color: (costs[id.id] == 0) ? 'red' : null
       }] : []; 
     });
   });
