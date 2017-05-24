@@ -14,7 +14,7 @@ To enable this Power-Up for your Trello boards, you'll need to go here:
 
 Select the Trello team you want to add the Power-Up to. Note: You need to be an admin of the Trello team to add custom Power-Ups to it.
 
-Now click the `Create new Power-Up` button. If this is your first time creating a Power-Up, you'll need to agree to a "Joint Developer Agreement" first. After you have done that, you just need to give your cool new Power-Up a name, and paste this app's manifest url, `https://trello-costs.glitch.me/manifest.json`.
+Now click the `Create new Power-Up` button. If this is your first time adding a Power-Up, you'll need to agree to a "Joint Developer Agreement" first. After you have done that, you just need to give your Power-Up a name, and paste this app's manifest url, `https://trello-costs.glitch.me/manifest.json`.
 
 Click `Save` and it's time to celebrate 🎉 🎊
 
