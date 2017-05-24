@@ -13,7 +13,7 @@ var getBadges = function(t){
         // its best to use static badges unless you need your badges to refresh
         // you can mix and match between static and dynamic
         text: `Cost: ${costs[id.id]}`,
-        color: null
+        color: (costs[id.id] === 0) ? 'FF0000' : null
       }] : []; 
     });
   });
@@ -31,7 +31,7 @@ var cardButtonCallback = function(t){
           var newCost = parseFloat(options.search).toFixed(2)
           return [
             {
-              text: parseFloat(options.search) ? `Set Cost to ${newCost}` : `(Enter a number to set cost.)`,
+              text: !Number.isNaN(parseFloat(options.search)) ? `Set Cost to ${newCost}` : `(Enter a number to set cost.)`,
               callback: function(t) {
                 if (newCost != 'NaN') {
                   var newCosts = costs ? costs : {};
