@@ -60,6 +60,10 @@ TrelloPowerUp.initialize({
     return t.get('board', 'shared', 'costs')
     .then(function(costs){
       var totalCost = 0;
+      return t.cards('id', 'closed')
+      .then(function(cards){
+        console.log(cards);
+      });
       for (var cost in costs) {
         totalCost = +totalCost + +costs[cost];
       }
