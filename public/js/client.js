@@ -100,5 +100,3 @@ TrelloPowerUp.initialize({
     });
   },
 });
-
-console.log('Loaded by: ' + document.referrer);
