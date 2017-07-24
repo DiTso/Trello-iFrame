@@ -1,7 +1,7 @@
 {
-	"name": "trello-costs",
+	"name": "trello-iframe",
 	"version": "0.0.1",
-	"description": "Add costs & view sum on trello boards.",
+	"description": "Use Trello's board bar to nest an iFrame of your choice in your board.",
 	"main": "server.js",
 	"scripts": {
 		"start": "node server.js"
