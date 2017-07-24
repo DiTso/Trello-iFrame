@@ -29,16 +29,17 @@ TrelloPowerUp.initialize({
                         if (Number.isNaN(parseFloat(options.search))) {
                           var a = document.createElement('a');
                           a.href = options.search;
-                          if (!a.host) {
-                            a.href = 'https://google.com/search?q='
+                          console.log(window.location.host);
+                          if (a.host == window.location.host) {
+                            a.href = 'https://duckduckgo.com/?q=' + encodeURIComponent(options.search);
                           }
                           return t.set('board', 'shared', 'iframe', {
-                            url: options.search,
+                            url: a.href,
                             height: iframe && iframe.height ? iframe.height: 500
                           })
                           .then(function(){
                             return t.boardBar({
-                              url: options.search,
+                              url: a.href,
                               height: iframe && iframe.height ? iframe.height : 500
                             }).then(function(){t.closePopup});
                           });

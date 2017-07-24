@@ -7,7 +7,7 @@
   "author": "webrender",
   "capabilities": [
     "board-buttons",
-    "callback",
+    "callback"
   ],
   "connectors": {
     "iframe": {
