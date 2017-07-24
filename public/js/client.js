@@ -8,12 +8,6 @@ TrelloPowerUp.initialize({
   'board-buttons': function(t, options){
     return t.get('board', 'shared', 'iframe')
     .then(function(iframe){
-      if (iframe) {
-        t.boardBar({
-          url: iframe.url ? iframe.url : '',
-          height: iframe.height ? iframe.height : 500
-        });
-      }
       return [{
         icon: './images/icon.svg',
         text: 'iFrame',
@@ -21,15 +15,31 @@ TrelloPowerUp.initialize({
             return t.popup({
               title: 'Trello iFrame',
               items: function(t, options) {
+                var text;
+                if (options.search && Number.isNaN(parseFloat(options.search))) {
+                  text = 'Set iFrame height.'
+                } else {
+                  if (options.search){
+                    text = 'set iFrame.'
+                    var a = document.createElement('a');
+                    a.href = options.search;
+                    if (a.host == window.location.host) {
+                      text = 'DuckDuckGo Search for \''+ options.search +'\'';
+                    } else {
+                      text = 'Set iFrame to ' + options.search.substr(0, 10) + '...';
+                    }
+                  } else {
+                    text = iframe && iframe.url ? 'Load last URL.' : 'Close iFrame.';
+                  }
+                }
                 return [
                   {
-                    text: Number.isNaN(parseFloat(options.search))  ? (options.search ? `Set iFrame.` : `Close iFrame.`) : `Set iFrame height.`,
+                    text: text,
                     callback: function(t) {
                       if (options.search) {
                         if (Number.isNaN(parseFloat(options.search))) {
                           var a = document.createElement('a');
                           a.href = options.search;
-                          console.log(window.location.host);
                           if (a.host == window.location.host) {
                             a.href = 'https://duckduckgo.com/?q=' + encodeURIComponent(options.search);
                           }
@@ -57,7 +67,11 @@ TrelloPowerUp.initialize({
                           }
                         }
                       } else {
-                        t.closeBoardBar();
+                        if (iframe && iframe.url) {
+                          t.closeBoardBar();
+                        } else {
+                          
+                        }
                       }
                       return t.closePopup();
                     }
@@ -65,8 +79,7 @@ TrelloPowerUp.initialize({
                 ];
               },
               search: {
-                text: iframe && iframe.url ? iframe.url : null,
-                placeholder: 'Enter URL, search query, or desired height.',
+                placeholder: iframe && iframe.url ? iframe.url : 'Enter URL, search query, or desired height.',
               }
             });
         }
