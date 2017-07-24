@@ -6,7 +6,6 @@ var SIGMA_ICON = 'https://cdn.glitch.com/380a7bed-fba7-4128-9418-b75f0d1d7492%2F
 
 TrelloPowerUp.initialize({
   'board-buttons': function(t, options){
-    
     return [{
       icon: './images/icon.svg',
       text: 'Open iFrame',
@@ -24,25 +23,25 @@ TrelloPowerUp.initialize({
                       if (Number.isNaN(parseFloat(options.search))) {
                         return t.set('board', 'shared', 'iframe', {
                           url: options.search,
-                          height: iframe.height ? iframe.height: 500
+                          height: iframe && iframe.height ? iframe.height: 500
                         })
                         .then(function(){
                           return t.boardBar({
                             url: options.search,
-                            height: iframe.height ? iframe.height : 500
-                          });
+                            height: iframe && iframe.height ? iframe.height : 500
+                          }).then(function(){t.closePopup});
                         });
                       } else {
                         if (iframe.url) {
                           return t.set('board', 'shared', 'iframe', {
-                            url: iframe.url ? iframe.url : '',
+                            url: iframe && iframe.url ? iframe.url : '',
                             height: options.search
                           })
                           .then(function(){
                             return t.boardBar({
-                              url: options.search,
-                              height: options.sear
-                            });
+                              url: iframe && iframe.url ? iframe.url : '',
+                              height: options.search
+                            }).then(function(){t.closePopup});
                           });
                         }
                       }
