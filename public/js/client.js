@@ -16,7 +16,7 @@ TrelloPowerUp.initialize({
               title: 'Trello iFrame',
               items: function(t, options) {
                 var text;
-                if (options.search && Number.isNaN(parseFloat(options.search))) {
+                if (options.search && !Number.isNaN(parseFloat(options.search))) {
                   text = 'Set iFrame height.'
                 } else {
                   if (options.search){
@@ -32,7 +32,9 @@ TrelloPowerUp.initialize({
                     text = iframe && iframe.url ? 'Load last URL.' : 'Close iFrame.';
                   }
                 }
-                var setButton = text ? {
+                var buttons = [];
+                if (text) {
+                  buttons.push({
                     text: text,
                     callback: function(t) {
                       if (options.search) {
@@ -50,18 +52,25 @@ TrelloPowerUp.initialize({
                             return t.boardBar({
                               url: a.href,
                               height: iframe && iframe.height ? iframe.height : 500
-                            }).then(function(){t.closePopup});
+                            }).then(function(){
+                              open = true;
+                              t.closePopup
+                            });
                           });
                         } else {
+                          console.log('iframe resize');
                           if (iframe.url) {
-                            return t.set('board', 'shared', 'iframe', {
+                            t.set('board', 'shared', 'iframe', {
                               url: iframe && iframe.url ? iframe.url : '',
                               height: options.search
                             })
                             .then(function(){
                               return t.boardBar({
                                 height: options.search
-                              }).then(function(){t.closePopup});
+                              }).then(function(){
+                                open = true;
+                                t.closePopup();
+                              });
                             });
                           }
                         }
@@ -69,20 +78,26 @@ TrelloPowerUp.initialize({
                         if (iframe && iframe.url) {
                           t.boardBar({
                             url: iframe.url
-                          })
+                          }).then(function() {
+                            open = true;
+                            t.closePopup();                          
+                          });
                         }
                       }
                       return t.closePopup();
                     }
-                  } : null;
-                var closeButton = iframe.open ? {
+                  });
+                }
+                if (iframe.open) {
+                  buttons.push({
                     text: 'Close iFrame.',
                     callback: function(t) {
                       open = false;
                       t.closePopup();
                     }
-                  } : null;
-                return [setButton, closeButton];
+                  });
+                }
+                return buttons;
               },
               search: {
                 placeholder: iframe && iframe.url ? iframe.url : 'Enter URL, search query, or desired height.',
