@@ -12,8 +12,26 @@ TrelloPowerUp.initialize({
       text: 'Open iFrame',
       callback: function(t) {
         return t.popup({
-          title: 'iFrames for Trello',
-          url: 'board-button-popup.html'
+          title: 'Set Cost...',
+          items: function(t, options) {
+            var newCost = parseFloat(options.search).toFixed(2)
+            return [
+              {
+                text: !Number.isNaN(parseFloat(options.search)) ? `Set Cost to ${newCost}` : `(Close iFrame)`,
+                callback: function(t) {
+                  if (newCost != 'NaN') {
+                    t.set('board','shared','costs',newCosts);
+                  }
+                  return t.closePopup();
+                }
+              }
+            ];
+          },
+          search: {
+            placeholder: 'Enter Cost',
+            empty: 'Error',
+            searching: 'Processing...'
+          }
         });
       }
     }];
