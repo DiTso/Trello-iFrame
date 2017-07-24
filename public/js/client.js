@@ -14,23 +14,26 @@ TrelloPowerUp.initialize({
         return t.popup({
           title: 'Set Cost...',
           items: function(t, options) {
-            var newCost = parseFloat(options.search).toFixed(2)
             return [
               {
-                text: !Number.isNaN(parseFloat(options.search)) ? `Set Cost to ${newCost}` : `(Close iFrame)`,
+                text: Number.isNaN(parseFloat(options.search))  ? (options.search ? `Set iFrame URL.` : `close iFrame`) : `Set iFrame height.`,
                 callback: function(t) {
-                  if (newCost != 'NaN') {
-                    t.set('board','shared','costs',newCosts);
+                  if (options.search) {
+                    
+                  } else {
+                    
                   }
+                  return options.search ? t.boardBar({
+                    url: options.search,
+                    height: '50%',
+                  }) : t.closeBoardBar();
                   return t.closePopup();
                 }
               }
             ];
           },
           search: {
-            placeholder: 'Enter Cost',
-            empty: 'Error',
-            searching: 'Processing...'
+            placeholder: 'Enter URL (or desired height)',
           }
         });
       }
