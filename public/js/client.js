@@ -6,12 +6,12 @@ var SIGMA_ICON = 'https://cdn.glitch.com/380a7bed-fba7-4128-9418-b75f0d1d7492%2F
 
 TrelloPowerUp.initialize({
   'board-buttons': function(t, options){
+    return t.get('board', 'shared', 'iframe')
+    .then(function(iframe){
     return [{
       icon: './images/icon.svg',
       text: 'Open iFrame',
       callback: function(t) {
-        return t.get('board', 'shared', 'iframe')
-        .then(function(iframe){
           return t.popup({
             title: 'Trello iFrames',
             items: function(t, options) {
