@@ -54,18 +54,18 @@ TrelloPowerUp.initialize({
                               height: iframe && iframe.height ? iframe.height : 500
                             }).then(function(){
                               open = true;
-                              t.closePopup
+                              t.closePopup();
                             });
                           });
                         } else {
-                          console.log('iframe resize');
                           if (iframe.url) {
                             t.set('board', 'shared', 'iframe', {
-                              url: iframe && iframe.url ? iframe.url : '',
+                              url: iframe.url,
                               height: options.search
                             })
                             .then(function(){
                               return t.boardBar({
+                                url: iframe.url,
                                 height: options.search
                               }).then(function(){
                                 open = true;
@@ -77,7 +77,8 @@ TrelloPowerUp.initialize({
                       } else {
                         if (iframe && iframe.url) {
                           t.boardBar({
-                            url: iframe.url
+                            url: iframe.url,
+                            height: iframe && iframe.height ? iframe.height : 500
                           }).then(function() {
                             open = true;
                             t.closePopup();                          
@@ -88,11 +89,12 @@ TrelloPowerUp.initialize({
                     }
                   });
                 }
-                if (iframe.open) {
+                if (open) {
                   buttons.push({
                     text: 'Close iFrame.',
                     callback: function(t) {
                       open = false;
+                      t.closeBoardBar();
                       t.closePopup();
                     }
                   });
