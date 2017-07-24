@@ -9,7 +9,7 @@ TrelloPowerUp.initialize({
     return t.get('board', 'shared', 'iframe')
     .then(function(iframe){
       return [{
-        icon: './images/icon.svg',
+        icon: 'https://cdn.glitch.com/ead1f78c-14f6-4f19-a7d3-a1167de39936%2Ficons8-External%20Link.svg?1500924369616',
         text: 'iFrame',
         callback: function(t) {
             return t.popup({
