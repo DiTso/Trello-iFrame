@@ -16,10 +16,10 @@ TrelloPowerUp.initialize({
       }
       return [{
         icon: './images/icon.svg',
-        text: 'Open iFrame',
+        text: 'iFrame',
         callback: function(t) {
             return t.popup({
-              title: 'Trello iFrames',
+              title: 'Trello iFrame',
               items: function(t, options) {
                 return [
                   {
@@ -51,7 +51,6 @@ TrelloPowerUp.initialize({
                             })
                             .then(function(){
                               return t.boardBar({
-                                url: iframe && iframe.url ? iframe.url : '',
                                 height: options.search
                               }).then(function(){t.closePopup});
                             });
@@ -66,6 +65,7 @@ TrelloPowerUp.initialize({
                 ];
               },
               search: {
+                text: iframe && iframe.url ? iframe.url : null,
                 placeholder: 'Enter URL, search query, or desired height.',
               }
             });
