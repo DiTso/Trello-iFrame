@@ -11,30 +11,53 @@ TrelloPowerUp.initialize({
       icon: './images/icon.svg',
       text: 'Open iFrame',
       callback: function(t) {
-        return t.popup({
-          title: 'Set Cost...',
-          items: function(t, options) {
-            return [
-              {
-                text: Number.isNaN(parseFloat(options.search))  ? (options.search ? `Set iFrame URL.` : `close iFrame`) : `Set iFrame height.`,
-                callback: function(t) {
-                  if (options.search) {
-                    
-                  } else {
-                    
+        return t.get('board', 'shared', 'iframe')
+        .then(function(iframe){
+          return t.popup({
+            title: 'Trello iFrames',
+            items: function(t, options) {
+              return [
+                {
+                  text: Number.isNaN(parseFloat(options.search))  ? (options.search ? `Set iFrame URL.` : `close iFrame`) : `Set iFrame height.`,
+                  callback: function(t) {
+                    if (options.search) {
+                      if (Number.isNaN(parseFloat(options.search))) {
+                        return t.set('board', 'shared', 'iframe', {
+                          url: options.search,
+                          height: iframe.height ? iframe.height: 500
+                        })
+                        .then(function(){
+                          return t.boardBar({
+                            url: options.search,
+                            height: iframe.height ? iframe.height : 500
+                          });
+                        });
+                      } else {
+                        if (iframe.url) {
+                          return t.set('board', 'shared', 'iframe', {
+                            url: iframe.url ? iframe.url : '',
+                            height: options.search
+                          })
+                          .then(function(){
+                            return t.boardBar({
+                              url: options.search,
+                              height: options.sear
+                            });
+                          });
+                        }
+                      }
+                    } else {
+                      t.closeBoardBar();
+                    }
+                    return t.closePopup();
                   }
-                  return options.search ? t.boardBar({
-                    url: options.search,
-                    height: '50%',
-                  }) : t.closeBoardBar();
-                  return t.closePopup();
                 }
-              }
-            ];
-          },
-          search: {
-            placeholder: 'Enter URL (or desired height)',
-          }
+              ];
+            },
+            search: {
+              placeholder: 'Enter URL (or desired height)',
+            }
+          });
         });
       }
     }];
