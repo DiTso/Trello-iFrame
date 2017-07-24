@@ -12,7 +12,7 @@ TrelloPowerUp.initialize({
       text: 'Open iFrame',
       callback: function(t) {
         return t.popup({
-          title: 'Board Button Popup',
+          title: 'iFrames for Trello',
           url: 'board-button-popup.html'
         });
       }
