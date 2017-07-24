@@ -4,19 +4,17 @@ var Promise = TrelloPowerUp.Promise;
 
 var SIGMA_ICON = 'https://cdn.glitch.com/380a7bed-fba7-4128-9418-b75f0d1d7492%2Fsigma_final.svg?1495405328591';
 
-var getBadges = function(t){
-  return t.get('board', 'shared', 'costs')
-  .then(function(costs){
-    return t.card('id')
-    .then(function(id) {
-      return costs && costs[id.id] ? [{
-        // its best to use static badges unless you need your badges to refresh
-        // you can mix and match between static and dynamic
-        text: `Cost: ${costs[id.id]}`,
-        color: (costs[id.id] == 0) ? 'red' : null
-      }] : []; 
-    });
-  });
+var getBadge = function(t){
+  return [{
+    icon: './images/icon.svg',
+    text: 'Open iFrame',
+    callback: function(t) {
+      return t.popup({
+        title: 'Board Button Popup',
+        url: './board-button-popup.html'
+      });
+    }
+  }];
 };
 
 var cardButtonCallback = function(t){
@@ -72,7 +70,7 @@ TrelloPowerUp.initialize({
     });
   },
   'card-badges': function(t, options){
-    return getBadges(t);
+    return getBadge(t);
   },
   'card-buttons': function(t, options) {
     
