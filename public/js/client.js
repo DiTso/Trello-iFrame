@@ -1,9 +1,7 @@
 /* global TrelloPowerUp */
 
 var Promise = TrelloPowerUp.Promise;
-
-var open = false;
-
+ 
 TrelloPowerUp.initialize({
   'board-buttons': function(t, options){
     return t.get('board', 'shared', 'iframe')
@@ -53,7 +51,6 @@ TrelloPowerUp.initialize({
                               url: a.href,
                               height: iframe && iframe.height ? iframe.height : 500
                             }).then(function(){
-                              open = true;
                               t.closePopup();
                             });
                           });
@@ -68,7 +65,6 @@ TrelloPowerUp.initialize({
                                 url: iframe.url,
                                 height: options.search
                               }).then(function(){
-                                open = true;
                                 t.closePopup();
                               });
                             });
@@ -80,22 +76,11 @@ TrelloPowerUp.initialize({
                             url: iframe.url,
                             height: iframe && iframe.height ? iframe.height : 500
                           }).then(function() {
-                            open = true;
                             t.closePopup();                          
                           });
                         }
                       }
                       return t.closePopup();
-                    }
-                  });
-                }
-                if (open) {
-                  buttons.push({
-                    text: 'Close iFrame.',
-                    callback: function(t) {
-                      open = false;
-                      t.closeBoardBar();
-                      t.closePopup();
                     }
                   });
                 }
