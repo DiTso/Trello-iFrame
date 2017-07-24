@@ -2,7 +2,7 @@
 
 var Promise = TrelloPowerUp.Promise;
 
-var SIGMA_ICON = 'https://cdn.glitch.com/380a7bed-fba7-4128-9418-b75f0d1d7492%2Fsigma_final.svg?1495405328591';
+var open = false;
 
 TrelloPowerUp.initialize({
   'board-buttons': function(t, options){
@@ -32,8 +32,7 @@ TrelloPowerUp.initialize({
                     text = iframe && iframe.url ? 'Load last URL.' : 'Close iFrame.';
                   }
                 }
-                return [
-                  {
+                var setButton = text ? {
                     text: text,
                     callback: function(t) {
                       if (options.search) {
@@ -68,15 +67,22 @@ TrelloPowerUp.initialize({
                         }
                       } else {
                         if (iframe && iframe.url) {
-                          t.closeBoardBar();
-                        } else {
-                          
+                          t.boardBar({
+                            url: iframe.url
+                          })
                         }
                       }
                       return t.closePopup();
                     }
-                  }
-                ];
+                  } : null;
+                var closeButton = iframe.open ? {
+                    text: 'Close iFrame.',
+                    callback: function(t) {
+                      open = false;
+                      t.closePopup();
+                    }
+                  } : null;
+                return [setButton, closeButton];
               },
               search: {
                 placeholder: iframe && iframe.url ? iframe.url : 'Enter URL, search query, or desired height.',
