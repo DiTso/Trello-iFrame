@@ -4,7 +4,9 @@ Hey there 👋
 
 This is a Trello Power-Up which lets you Use Trello's board bar to nest an iFrame of your choice in your board.
 
-![](https://cdn.glitch.com/380a7bed-fba7-4128-9418-b75f0d1d7492%2FScreen%20Shot%202017-05-21%20at%204.31.26%20PM.png?1495409557125)
+![](https://cdn.glitch.com/ead1f78c-14f6-4f19-a7d3-a1167de39936%2Fdemo.gif?1500925672421)
+
+![](https://cdn.glitch.com/ead1f78c-14f6-4f19-a7d3-a1167de39936%2Fwedding_screen.png?1500928191549)
 
 
 To enable this Power-Up for your Trello boards, you'll need to go here:
