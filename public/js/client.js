@@ -61,9 +61,8 @@ TrelloPowerUp.initialize({
                               height: options.search
                             })
                             .then(function(){
-                              return t.boardBar({
+                              return t.overlay({
                                 url: iframe.url,
-                                height: options.search
                               }).then(function(){
                                 t.closePopup();
                               });
@@ -72,9 +71,8 @@ TrelloPowerUp.initialize({
                         }
                       } else {
                         if (iframe && iframe.url) {
-                          t.boardBar({
+                          t.overlay({
                             url: iframe.url,
-                            height: iframe && iframe.height ? iframe.height : 500
                           }).then(function() {
                             t.closePopup();                          
                           });
