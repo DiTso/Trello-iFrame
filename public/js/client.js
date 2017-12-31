@@ -47,9 +47,10 @@ TrelloPowerUp.initialize({
                             height: iframe && iframe.height ? iframe.height: 500
                           })
                           .then(function(){
-                            return t.boardBar({
+                            return t.overlay({
                               url: a.href,
-                              height: iframe && iframe.height ? iframe.height : 500
+                              title: 'Trello iFrame',
+                              fullscreen: false,
                             }).then(function(){
                               t.closePopup();
                             });
@@ -63,6 +64,9 @@ TrelloPowerUp.initialize({
                             .then(function(){
                               return t.overlay({
                                 url: iframe.url,
+                                title: 'Trello iFrame',
+                                fullscreen: false,
+
                               }).then(function(){
                                 t.closePopup();
                               });
@@ -73,6 +77,7 @@ TrelloPowerUp.initialize({
                         if (iframe && iframe.url) {
                           t.overlay({
                             url: iframe.url,
+                            height: 800
                           }).then(function() {
                             t.closePopup();                          
                           });
